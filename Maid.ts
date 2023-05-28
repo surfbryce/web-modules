@@ -86,15 +86,15 @@ class Maid {
 		return item
 	}
 
-	public GiveItems<T extends Item>(items: T[]): T[] {
+	public GiveItems<T extends Item>(...args: T[]): T[] {
 		// Loop through all of our items
-		for (const item of items) {
+		for (const item of args) {
 			// Give the item
 			this.Give(item)
 		}
 
 		// Return back our items
-		return items
+		return Array.from(arguments)
 	}
 
 	public Has(key: any): boolean {
