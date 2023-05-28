@@ -77,7 +77,7 @@ class Maid {
 		}
 
 		// Determine our final-key
-		const finalKey = (key || GetUniqueId())
+		const finalKey = (key ?? GetUniqueId())
 
 		// Check if we already exist
 		if (this.Has(finalKey)) {
@@ -122,7 +122,7 @@ class Maid {
 
 	public CleanUp() {
 		// Loop through all of our items
-		for (const key of this.Items) {
+		for (const [key, _] of this.Items) {
 			// Clean the item
 			this.Clean(key)
 		}
