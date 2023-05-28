@@ -70,7 +70,7 @@ class Maid {
 	// Public Methods
 	public Give<T extends Item>(item: T, key?: any): T {
 		// If we're already destroyed then we can just clean the item immediately
-		if (this.Destroyed) {
+		if (this.DestroyedState) {
 			this.CleanItem(item)
 
 			return item
