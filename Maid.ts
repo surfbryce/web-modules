@@ -79,6 +79,12 @@ class Maid {
 		// Determine our final-key
 		const finalKey = (key || GetUniqueId())
 
+		// Check if we already exist
+		if (this.Has(finalKey)) {
+			// Clean our previous item
+			this.Clean(finalKey)
+		}
+
 		// Now store ourselves
 		this.Items.set(finalKey, item)
 
