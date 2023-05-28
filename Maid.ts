@@ -1,13 +1,30 @@
 // Packages
 import {GetUniqueId} from './UniqueId'
+import {Signal, Event} from './Signal'
 
 // Local Types
 type Callback = (() => void)
 
+// Signal Types
+type DestroyingSignal = (() => void)
+type CleanedSignal = (() => void)
+type DestroyedSignal = (() => void)
+
 // Class
 class Maid {
+	// Private Properties
 	private Items: Map<any, (Maid | Callback)>
-	private Destroyed: boolean
+	private DestroyedState: boolean
+
+	// Signals
+	private DestroyingSignal: Signal<DestroyingSignal>
+	private CleanedSignal: Signal<CleanedSignal>
+	private DestroyedSignal: Signal<DestroyedSignal>
+
+	// Events
+	public Destroying: Event<DestroyingSignal>
+	public Cleaned: Event<CleanedSignal>
+	public Destroyed: Event<DestroyedSignal>
 
 	// Constructor
 	constructor() {
@@ -15,7 +32,20 @@ class Maid {
 		this.Items = new Map()
 
 		// Store our initial destroyed state
-		this.Destroyed = false
+		this.DestroyedState = false
+
+		// Create our signals/events
+		{
+			// Signals
+			this.DestroyingSignal = new Signal()
+			this.CleanedSignal = new Signal()
+			this.DestroyedSignal = new Signal()
+
+			// Events
+			this.Destroying = this.DestroyingSignal.GetEvent()
+			this.Cleaned = this.CleanedSignal.GetEvent()
+			this.Destroyed = this.DestroyedSignal.GetEvent()
+		}
 	}
 
 	// Private Methods
@@ -73,20 +103,45 @@ class Maid {
 			// Clean the item
 			this.Clean(key)
 		}
+
+		// Make sure we aren't destroyed prior to firing
+		if (this.DestroyedState === false) {
+			this.CleanedSignal.Fire()
+		}
+	}
+
+	public IsDestroyed() {
+		return this.DestroyedState
 	}
 
 	// Deconstructor
 	public Destroy() {
 		// Make sure we don't perform twice
-		if (this.Destroyed === false) {
+		if (this.DestroyedState === false) {
 			// Set our destroyed state
-			this.Destroyed = true
+			this.DestroyedState = true
+
+			// Fire our Destroying signal
+			this.DestroyingSignal.Fire()
 
 			// Clean out all our items
 			this.CleanUp()
 
 			// Now force remove our map
 			delete (this as any).Items
+
+			// Fire our destroyed signal
+			this.DestroyedSignal.Fire()
+
+			// Now destroy all our signals
+			this.DestroyingSignal.Destroy()
+			this.CleanedSignal.Destroy()
+			this.DestroyedSignal.Destroy()
+
+			// Force remove our signal references
+			delete (this as any).DestroyingSignal
+			delete (this as any).CleanedSignal
+			delete (this as any).DestroyedSignal
 		}
 	}
 }
