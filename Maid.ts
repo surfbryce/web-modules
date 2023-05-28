@@ -10,10 +10,13 @@ type DestroyingSignal = (() => void)
 type CleanedSignal = (() => void)
 type DestroyedSignal = (() => void)
 
+// Maid Types
+type Item = (Maid | Callback | MutationObserver | ResizeObserver)
+
 // Class
 class Maid {
 	// Private Properties
-	private Items: Map<any, (Maid | Callback)>
+	private Items: Map<any, Item>
 	private DestroyedState: boolean
 
 	// Signals
@@ -49,20 +52,24 @@ class Maid {
 	}
 
 	// Private Methods
-	private CleanItem<T extends (Maid | Callback)>(item: T) {
+	private CleanItem<T extends Item>(item: T) {
 		// Check if we're a maid
 		if (item instanceof Maid) {
 			item.Destroy()
+		} else if ((item instanceof MutationObserver) || (item instanceof ResizeObserver)) {
+			item.disconnect()
 		} else {
 			item()
 		}
 	}
 
 	// Public Methods
-	public Give<T extends Maid | Callback>(item: T, key?: any) {
+	public Give<T extends Item>(item: T, key?: any): T {
 		// If we're already destroyed then we can just clean the item immediately
 		if (this.Destroyed) {
-			return this.CleanItem(item)
+			this.CleanItem(item)
+
+			return item
 		}
 
 		// Determine our final-key
@@ -70,6 +77,9 @@ class Maid {
 
 		// Now store ourselves
 		this.Items.set(finalKey, item)
+
+		// Return our item for ease-of-use
+		return item
 	}
 
 	public GiveItems<T extends Maid | Callback>(items: T[]) {
