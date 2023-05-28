@@ -1,6 +1,6 @@
 // Packages
 import {GetUniqueId} from './UniqueId'
-import {Signal, Event} from './Signal'
+import {Signal, Event, Connection, IsConnection} from './Signal'
 
 // Local Types
 type Callback = (() => void)
@@ -11,7 +11,7 @@ type CleanedSignal = (() => void)
 type DestroyedSignal = (() => void)
 
 // Maid Types
-type Item = (Maid | Callback | MutationObserver | ResizeObserver)
+type Item = (Maid | Callback | MutationObserver | ResizeObserver | Connection<any>)
 
 // Class
 class Maid {
@@ -58,6 +58,8 @@ class Maid {
 			item.Destroy()
 		} else if ((item instanceof MutationObserver) || (item instanceof ResizeObserver)) {
 			item.disconnect()
+		} else if (IsConnection(item)) {
+			item.Disconnect()
 		} else {
 			item()
 		}

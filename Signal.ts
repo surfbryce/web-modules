@@ -139,5 +139,8 @@ class Signal<P extends Callback> {
 }
 
 // Exports
-export type {Event}
+export type {Event, Connection}
+export const IsConnection = (value: any): value is Connection<any> => {
+	return (value instanceof Connection)
+}
 export {Signal}
