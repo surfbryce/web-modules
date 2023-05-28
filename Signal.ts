@@ -85,6 +85,15 @@ class Signal<P extends Callback> {
 	private ConnectionReferences: SignalConnectionReferences<P>
 	private DestroyedState: boolean
 
+	// Constructor
+	constructor() {
+		// Create our list of connections
+		this.ConnectionReferences = new FreeArray()
+
+		// Store our initial destroyed state
+		this.DestroyedState = false
+	}
+
 	// Public Methods
 	public Connect(callback: P): Connection<P> {
 		// Make sure we aren't destroyed
