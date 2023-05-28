@@ -11,7 +11,7 @@ type CleanedSignal = (() => void)
 type DestroyedSignal = (() => void)
 
 // Maid Types
-type Item = (Maid | Callback | MutationObserver | ResizeObserver | Connection<any>)
+type Item = (Maid | Callback | MutationObserver | ResizeObserver | Connection<any> | HTMLElement)
 
 // Class
 class Maid {
@@ -60,6 +60,8 @@ class Maid {
 			item.disconnect()
 		} else if (IsConnection(item)) {
 			item.Disconnect()
+		} else if(item instanceof HTMLElement) {
+			item.remove()
 		} else {
 			item()
 		}
