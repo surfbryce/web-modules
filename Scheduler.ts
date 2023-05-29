@@ -26,10 +26,10 @@ class Scheduled {
 }
 
 export const Timeout = (seconds: number, callback: ((...args: any[]) => any)) => {
-	return new Scheduled(clearTimeout, setTimeout(callback, (seconds * 1000)))
+	return new Scheduled(window.clearTimeout.bind(window), setTimeout(callback, (seconds * 1000)))
 }
 export const Interval = (everySeconds: number, callback: ((...args: any[]) => any)) => {
-	return new Scheduled(clearInterval, setInterval(callback, (everySeconds * 1000)))
+	return new Scheduled(window.clearTimeout.bind(window), setInterval(callback, (everySeconds * 1000)))
 }
 
 export type {Scheduled}
