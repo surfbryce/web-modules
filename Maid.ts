@@ -1,6 +1,7 @@
 // Packages
 import {GetUniqueId} from './UniqueId'
 import {Signal, Event, Connection, IsConnection} from './Signal'
+import {IsScheduled, Scheduled} from './Scheduler'
 
 // Local Types
 type Callback = (() => void)
@@ -11,7 +12,14 @@ type CleanedSignal = (() => void)
 type DestroyedSignal = (() => void)
 
 // Maid Types
-type Item = (Maid | Callback | MutationObserver | ResizeObserver | Connection<any> | HTMLElement)
+type Item = (
+	Maid
+	| Scheduled
+	| MutationObserver | ResizeObserver
+	| HTMLElement
+	| Connection<any>
+	| Callback
+)
 
 // Class
 class Maid {
@@ -56,6 +64,8 @@ class Maid {
 		// Check if we're a maid
 		if (item instanceof Maid) {
 			item.Destroy()
+		} else if (IsScheduled(item)) {
+			item.Cancel()
 		} else if ((item instanceof MutationObserver) || (item instanceof ResizeObserver)) {
 			item.disconnect()
 		} else if (IsConnection(item)) {
