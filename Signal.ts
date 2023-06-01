@@ -14,7 +14,6 @@ type SignalConnectionReferences<P extends Callback> = FreeArray<
 class Connection<P extends Callback> {
 	// Private Properties
 	private ConnectionReferences: SignalConnectionReferences<P>
-	private Callback: P
 	private Location: string
 	private Disconnected: boolean
 
@@ -22,7 +21,6 @@ class Connection<P extends Callback> {
 	constructor(connections: SignalConnectionReferences<P>, callback: P) {
 		// Store our signal/callback
 		this.ConnectionReferences = connections
-		this.Callback = callback
 
 		// Store our initial disconnected state
 		this.Disconnected = false
