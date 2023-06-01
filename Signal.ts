@@ -118,7 +118,7 @@ class Signal<P extends Callback> {
 		}
 	}
 
-	public GetEvent() {
+	public GetEvent(): Event<P> {
 		// Return our event
 		return new Event(this)
 	}
