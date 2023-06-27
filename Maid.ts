@@ -17,7 +17,7 @@ type Item = (
 	| Scheduled
 	| MutationObserver | ResizeObserver
 	| HTMLElement
-	| Connection<any>
+	| Signal<any> | Connection<any>
 	| Callback
 )
 
@@ -62,7 +62,7 @@ class Maid {
 	// Private Methods
 	private CleanItem<T extends Item>(item: T) {
 		// Check if we're a maid
-		if (item instanceof Maid) {
+		if ((item instanceof Maid) || (item instanceof Signal)) {
 			item.Destroy()
 		} else if (IsScheduled(item)) {
 			item.Cancel()
