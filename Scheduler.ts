@@ -31,6 +31,9 @@ export const Timeout = (seconds: number, callback: ((...args: any[]) => any)) =>
 export const Interval = (everySeconds: number, callback: ((...args: any[]) => any)) => {
 	return new Scheduled(window.clearTimeout.bind(window), setInterval(callback, (everySeconds * 1000)))
 }
+export const OnNextFrame = (callback: ((...args: any[]) => any)) => {
+	return new Scheduled(window.cancelAnimationFrame.bind(window), requestAnimationFrame(callback))
+}
 
 export type {Scheduled}
 export const IsScheduled = (value: any): value is Scheduled => {
