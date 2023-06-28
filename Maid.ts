@@ -13,7 +13,7 @@ type DestroyedSignal = (() => void)
 
 // Maid Types
 type Item = (
-	Maid
+	Giveable
 	| Scheduled
 	| MutationObserver | ResizeObserver
 	| HTMLElement
@@ -21,8 +21,17 @@ type Item = (
 	| Callback
 )
 
+abstract class Giveable {
+	abstract Destroy(): void
+}
+
+// Helper Methods
+const IsGiveable = (item: any): item is Giveable => {
+	return ("Destroy" in item)
+}
+
 // Class
-class Maid {
+class Maid implements Giveable {
 	// Private Properties
 	private Items: Map<any, Item>
 	private DestroyedState: boolean
@@ -62,7 +71,7 @@ class Maid {
 	// Private Methods
 	private CleanItem<T extends Item>(item: T) {
 		// Check if we're a maid
-		if ((item instanceof Maid) || (item instanceof Signal)) {
+		if (IsGiveable(item)) {
 			item.Destroy()
 		} else if (IsScheduled(item)) {
 			item.Cancel()
@@ -180,4 +189,4 @@ class Maid {
 }
 
 // Export our maid class
-export {Maid}
+export { Maid, Giveable }
