@@ -1,5 +1,4 @@
 const GeneratedIds: Set<string> = new Set()
-
 export function GetUniqueId(): string {
 	// Keep generating ids until we find one we don't have
 	while (true) {

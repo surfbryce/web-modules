@@ -1,5 +1,5 @@
 // Packages
-import {GetUniqueId} from './UniqueId'
+import {GetUniqueId} from './UniqueId.ts'
 
 // Class
 class FreeArray<I> {

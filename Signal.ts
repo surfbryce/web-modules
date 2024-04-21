@@ -1,5 +1,5 @@
 // Packages
-import {FreeArray} from "./FreeArray";
+import {FreeArray} from "./FreeArray.ts";
 
 // Connection Types
 type Callback = ((...args: any[]) => void)

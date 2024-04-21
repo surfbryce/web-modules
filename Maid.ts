@@ -1,7 +1,7 @@
 // Packages
-import {GetUniqueId} from './UniqueId'
-import {Signal, Event, Connection, IsConnection} from './Signal'
-import {IsScheduled, Scheduled} from './Scheduler'
+import {GetUniqueId} from './UniqueId.ts'
+import {Signal, Event, Connection, IsConnection} from './Signal.ts'
+import {IsScheduled, Scheduled} from './Scheduler.ts'
 
 // Local Types
 type Callback = (() => void)
@@ -20,6 +20,7 @@ type Item = (
 	| Signal<any> | Connection<any>
 	| Callback
 )
+export type GiveableItem = Item
 
 abstract class Giveable {
 	abstract Destroy(): void
@@ -123,10 +124,15 @@ class Maid implements Giveable {
 	}
 
 	public Has(key: any): boolean {
-		return this.Items.has(key)
+		return (this.DestroyedState ? false : this.Items.has(key))
 	}
 
 	public Clean(key: any) {
+		// If we are destroyed then we are already cleaned up everything
+		if (this.DestroyedState) {
+			return
+		}
+
 		// First determine if we have the item
 		const item = this.Items.get(key)
 
@@ -140,6 +146,11 @@ class Maid implements Giveable {
 	}
 
 	public CleanUp() {
+		// If we're already destroyed then we're already cleaned-up
+		if (this.DestroyedState) {
+			return
+		}
+
 		// Loop through all of our items
 		for (const [key, _] of this.Items) {
 			// Clean the item
@@ -160,14 +171,14 @@ class Maid implements Giveable {
 	public Destroy() {
 		// Make sure we don't perform twice
 		if (this.DestroyedState === false) {
-			// Set our destroyed state
-			this.DestroyedState = true
-
 			// Fire our Destroying signal
 			this.DestroyingSignal.Fire()
 
 			// Clean out all our items
 			this.CleanUp()
+
+			// Set our destroyed state
+			this.DestroyedState = true
 
 			// Now force remove our map
 			delete (this as any).Items
