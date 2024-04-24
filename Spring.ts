@@ -104,6 +104,24 @@ class Spring {
 		this.Sleeping = true
 	}
 
+	public SetFrequency(value: number) {
+		// Make sure we were passed a valid Spring
+		if ((this.DampingRatio * value) < 0) {
+			throw new Error("Spring does not converge.")
+		}
+
+		this.Frequency = value
+	}
+
+	public SetDampingRatio(value: number) {
+		// Make sure we were passed a valid Spring
+		if ((value * this.Frequency) < 0) {
+			throw new Error("Spring does not converge.")
+		}
+
+		this.DampingRatio = value
+	}
+
 	public IsSleeping(): boolean {
 		return this.Sleeping
 	}
