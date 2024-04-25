@@ -9,8 +9,8 @@ const cos = Math.cos
 const sqrt = Math.sqrt
 
 // Behavior Constants
-const SLEEP_OFFSET_SQ_LIMIT = (1/3840)^2 // Square of the offset sleep limit
-const SLEEP_VELOCITY_SQ_LIMIT = 1e-2^2 // Square of the velocity sleep limit
+const SLEEP_OFFSET_SQ_LIMIT = ((1 / 3840) ** 2) // Square of the offset sleep limit
+const SLEEP_VELOCITY_SQ_LIMIT = (1e-2 ** 2) // Square of the velocity sleep limit
 const EPS = 1e-5 // Epsilon for stability checks around pathological frequency/damping values
 
 // Class
@@ -163,6 +163,7 @@ export default class Spring {
 	}
 
 	public CanSleep(): boolean {
+		console.log("CAN SLEEP", this.Velocity ** 2, SLEEP_VELOCITY_SQ_LIMIT, "/", (this.Goal - this.Position) ** 2, SLEEP_OFFSET_SQ_LIMIT)
 		return (
 			(((this.Velocity ** 2) > SLEEP_VELOCITY_SQ_LIMIT) || (((this.Goal - this.Position) ** 2) > SLEEP_OFFSET_SQ_LIMIT))
 			? false
