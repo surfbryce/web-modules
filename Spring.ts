@@ -15,7 +15,7 @@ const EPS = 1e-5 // Epsilon for stability checks around pathological frequency/d
 
 // Class
 export default class Spring {
-	// Private Properties
+	// Public Properties
 	private DampingRatio: number;
 	private Frequency: number;
 	private Goal: number;
@@ -168,6 +168,10 @@ export default class Spring {
 			? false
 			: true
 		)
+	}
+
+	public GetGoal(): number {
+		return this.Goal
 	}
 
 	public SetGoal(goal: number) {
