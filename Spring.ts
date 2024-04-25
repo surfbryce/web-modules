@@ -163,7 +163,6 @@ export default class Spring {
 	}
 
 	public CanSleep(): boolean {
-		console.log("CAN SLEEP", this.Velocity ** 2, SLEEP_VELOCITY_SQ_LIMIT, "/", (this.Goal - this.Position) ** 2, SLEEP_OFFSET_SQ_LIMIT)
 		return (
 			(((this.Velocity ** 2) > SLEEP_VELOCITY_SQ_LIMIT) || (((this.Goal - this.Position) ** 2) > SLEEP_OFFSET_SQ_LIMIT))
 			? false
