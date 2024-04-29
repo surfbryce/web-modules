@@ -17,7 +17,8 @@ type Item = (
 	| Scheduled
 	| MutationObserver | ResizeObserver
 	| HTMLElement
-	| Signal | Connection
+	// deno-lint-ignore no-explicit-any
+	| Signal<any> | Connection<any>
 	| Callback
 )
 export type GiveableItem = Item

@@ -141,7 +141,8 @@ class Signal<P extends Callback = DefaultCallback> {
 
 // Exports
 export type {Event, Connection}
-export const IsConnection = (value: unknown): value is Connection => {
+// deno-lint-ignore no-explicit-any
+export const IsConnection = (value: any): value is Connection<any> => {
 	return (value instanceof Connection)
 }
 export {Signal}
