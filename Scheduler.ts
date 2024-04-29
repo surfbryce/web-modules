@@ -1,3 +1,6 @@
+// The following image is a visual representation of the stages in a single frame
+// https://miro.medium.com/v2/resize:fit:1400/format:webp/1*ad-k5hYKQnRQJF8tv8BIqg.png
+
 // Define a simple and easy data format for keeping track of scheduled tasks
 type Scheduled = [(0 | 1 | 2), number, true?] // First defines which type of task was scheduled, second is its id
 export const Cancel = (scheduled: Scheduled) => {
@@ -18,22 +21,19 @@ export const Cancel = (scheduled: Scheduled) => {
 // deno-lint-ignore no-explicit-any
 type ScheduledCallback = (...args: any[]) => void
 
-// Handle Javascript Event-Loop Scheduling
+// Handle Javascript Timer Scheduling
 export const Timeout = (seconds: number, callback: ScheduledCallback): Scheduled => {
 	return [0, setTimeout(callback, (seconds * 1000))]
 }
 export const Interval = (everySeconds: number, callback: ScheduledCallback): Scheduled => {
 	return [1, setInterval(callback, (everySeconds * 1000))]
 }
-export const OnNextProcess = (callback: ScheduledCallback): Scheduled => {
-	return [1, setInterval(callback, 0)]
-}
 
-// Now handle Browser Repaint Scheduling
+// Now handle Browser Event Scheduling
 export const OnPreRender = (callback: ScheduledCallback): Scheduled => {
 	return [2, requestAnimationFrame(callback)]
 }
-export const OnPostRender = (callback: ScheduledCallback): Scheduled => {
+export const Defer = (callback: ScheduledCallback): Scheduled => {
 	const scheduled: Scheduled = [2, 0]
 
 	scheduled[1] = requestAnimationFrame(

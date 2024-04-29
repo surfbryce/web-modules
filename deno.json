@@ -1,6 +1,6 @@
 {
 	"name": "@socali/modules",
-	"version": "3.0.2",
+	"version": "4.0.0",
 	"compilerOptions": {
 		"lib": [
 			"ESNext",
