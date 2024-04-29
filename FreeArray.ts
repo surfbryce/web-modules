@@ -17,7 +17,7 @@ class FreeArray<I> {
 	}
 
 	// Public Methods
-	public Push(item: any): string {
+	public Push(item: I): string {
 		// Generate our key
 		const key = GetUniqueId()
 
@@ -28,11 +28,11 @@ class FreeArray<I> {
 		return key
 	}
 
-	public Get(key: string): any {
+	public Get(key: string): (I | undefined) {
 		return this.Items.get(key)
 	}
 
-	public Remove(key: string): any {
+	public Remove(key: string): (I | undefined) {
 		// Make sure we have an item
 		const item = this.Items.get(key)
 
@@ -62,9 +62,6 @@ class FreeArray<I> {
 
 		// Mark that we are destroyed
 		this.DestroyedState = true
-
-		// Delete our items map
-		delete (this as any).Items
 	}
 }
 

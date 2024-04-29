@@ -3,7 +3,7 @@ import {FreeArray} from "./FreeArray.ts";
 
 // Connection Types
 type DefaultCallback = () => void
-type Callback = (...args: any[]) => void
+type Callback = (...args: unknown[]) => void
 type SignalConnectionReferences<P extends Callback> = FreeArray<
 	{
 		Callback: P;
@@ -47,11 +47,6 @@ class Connection<P extends Callback = DefaultCallback> {
 
 		// Remove ourselves from our signal
 		this.ConnectionReferences.Remove(this.Location)
-
-		// Delete our references
-		delete (this as any).Location
-		delete (this as any).Callback
-		delete (this as any).SignalConnections
 	}
 
 	public IsDisconnected() {
@@ -140,15 +135,12 @@ class Signal<P extends Callback = DefaultCallback> {
 
 		// Disconnect ourself
 		this.DestroyedState = true
-
-		// Delete our references
-		delete (this as any).ConnectionReferences
 	}
 }
 
 // Exports
 export type {Event, Connection}
-export const IsConnection = (value: any): value is Connection<any> => {
+export const IsConnection = (value: unknown): value is Connection => {
 	return (value instanceof Connection)
 }
 export {Signal}

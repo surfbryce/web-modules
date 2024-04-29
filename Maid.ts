@@ -1,7 +1,7 @@
 // Packages
-import {GetUniqueId} from './UniqueId.ts'
-import {Signal, Event, Connection, IsConnection} from './Signal.ts'
-import {IsScheduled, Scheduled} from './Scheduler.ts'
+import { GetUniqueId } from './UniqueId.ts'
+import { type Event, type Connection, Signal, IsConnection } from './Signal.ts'
+import { type Scheduled, IsScheduled, Cancel } from './Scheduler.ts'
 
 // Local Types
 type Callback = (() => void)
@@ -17,7 +17,7 @@ type Item = (
 	| Scheduled
 	| MutationObserver | ResizeObserver
 	| HTMLElement
-	| Signal<any> | Connection<any>
+	| Signal | Connection
 	| Callback
 )
 export type GiveableItem = Item
@@ -27,14 +27,14 @@ abstract class Giveable {
 }
 
 // Helper Methods
-const IsGiveable = (item: any): item is Giveable => {
+const IsGiveable = (item: object): item is Giveable => {
 	return ("Destroy" in item)
 }
 
 // Class
 class Maid implements Giveable {
 	// Private Properties
-	private Items: Map<any, Item>
+	private Items: Map<unknown, Item>
 	private DestroyedState: boolean
 
 	// Signals
@@ -75,7 +75,7 @@ class Maid implements Giveable {
 		if (IsGiveable(item)) {
 			item.Destroy()
 		} else if (IsScheduled(item)) {
-			item.Cancel()
+			Cancel(item)
 		} else if ((item instanceof MutationObserver) || (item instanceof ResizeObserver)) {
 			item.disconnect()
 		} else if (IsConnection(item)) {
@@ -88,7 +88,7 @@ class Maid implements Giveable {
 	}
 
 	// Public Methods
-	public Give<T extends Item>(item: T, key?: any): T {
+	public Give<T extends Item>(item: T, key?: unknown): T {
 		// If we're already destroyed then we can just clean the item immediately
 		if (this.DestroyedState) {
 			this.CleanItem(item)
@@ -123,11 +123,11 @@ class Maid implements Giveable {
 		return args
 	}
 
-	public Has(key: any): boolean {
+	public Has(key: unknown): boolean {
 		return (this.DestroyedState ? false : this.Items.has(key))
 	}
 
-	public Clean(key: any) {
+	public Clean(key: unknown) {
 		// If we are destroyed then we are already cleaned up everything
 		if (this.DestroyedState) {
 			return
@@ -180,9 +180,6 @@ class Maid implements Giveable {
 			// Set our destroyed state
 			this.DestroyedState = true
 
-			// Now force remove our map
-			delete (this as any).Items
-
 			// Fire our destroyed signal
 			this.DestroyedSignal.Fire()
 
@@ -190,11 +187,6 @@ class Maid implements Giveable {
 			this.DestroyingSignal.Destroy()
 			this.CleanedSignal.Destroy()
 			this.DestroyedSignal.Destroy()
-
-			// Force remove our signal references
-			delete (this as any).DestroyingSignal
-			delete (this as any).CleanedSignal
-			delete (this as any).DestroyedSignal
 		}
 	}
 }
