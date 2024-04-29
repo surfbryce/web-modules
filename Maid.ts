@@ -112,7 +112,7 @@ class Maid implements Giveable {
 		return item
 	}
 
-	public GiveItems<T extends Item>(...args: T[]): T[] {
+	public GiveItems<T extends Item[]>(...args: T): T {
 		// Loop through all of our items
 		for (const item of args) {
 			// Give the item
@@ -120,7 +120,7 @@ class Maid implements Giveable {
 		}
 
 		// Return back our items
-		return Array.from(arguments)
+		return args
 	}
 
 	public Has(key: any): boolean {
