@@ -3,7 +3,8 @@ import {FreeArray} from "./FreeArray.ts";
 
 // Connection Types
 type DefaultCallback = () => void
-type Callback = (...args: unknown[]) => void
+// deno-lint-ignore no-explicit-any
+type Callback = (...args: any[]) => void
 type SignalConnectionReferences<P extends Callback> = FreeArray<
 	{
 		Callback: P;

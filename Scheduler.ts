@@ -15,7 +15,8 @@ export const Cancel = (scheduled: Scheduled) => {
 }
 
 // QOL Type
-type ScheduledCallback = (...args: unknown[]) => void
+// deno-lint-ignore no-explicit-any
+type ScheduledCallback = (...args: any[]) => void
 
 // Handle Javascript Event-Loop Scheduling
 export const Timeout = (seconds: number, callback: ScheduledCallback): Scheduled => {
