@@ -2,7 +2,8 @@
 import {FreeArray} from "./FreeArray.ts";
 
 // Connection Types
-type Callback = ((...args: any[]) => void)
+type DefaultCallback = () => void
+type Callback = (...args: any[]) => void
 type SignalConnectionReferences<P extends Callback> = FreeArray<
 	{
 		Callback: P;
@@ -11,7 +12,7 @@ type SignalConnectionReferences<P extends Callback> = FreeArray<
 >
 
 // Classes
-class Connection<P extends Callback> {
+class Connection<P extends Callback = DefaultCallback> {
 	// Private Properties
 	private ConnectionReferences: SignalConnectionReferences<P>
 	private Location: string
@@ -58,7 +59,7 @@ class Connection<P extends Callback> {
 	}
 }
 
-class Event<P extends Callback> {
+class Event<P extends Callback = DefaultCallback> {
 	// Private Properties
 	private Signal: Signal<P>
 
@@ -78,7 +79,7 @@ class Event<P extends Callback> {
 	}
 }
 
-class Signal<P extends Callback> {
+class Signal<P extends Callback = DefaultCallback> {
 	// Private Properties
 	private ConnectionReferences: SignalConnectionReferences<P>
 	private DestroyedState: boolean
