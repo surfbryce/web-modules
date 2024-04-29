@@ -174,8 +174,13 @@ export default class Spring {
 		return this.Goal
 	}
 
-	public SetGoal(goal: number) {
+	public SetGoal(goal: number, replacePosition?: boolean) {
 		this.Goal = goal
+
+		if (replacePosition) {
+			this.Position = goal
+			this.Velocity = 0
+		}
 	}
 
 	public SetDampingRatio(dampingRatio: number) {
