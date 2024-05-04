@@ -124,6 +124,10 @@ class Maid implements Giveable {
 		return args
 	}
 
+	public Get<T extends Item>(key: unknown): (T | undefined) {
+		return (this.DestroyedState ? undefined : (this.Items.get(key) as T))
+	}
+
 	public Has(key: unknown): boolean {
 		return (this.DestroyedState ? false : this.Items.has(key))
 	}
