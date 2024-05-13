@@ -3,24 +3,24 @@ import {FreeArray} from "./FreeArray.ts";
 
 // Connection Types
 type DefaultCallback = () => void
-// deno-lint-ignore no-explicit-any
-type Callback = (...args: any[]) => void
-type SignalConnectionReferences<P extends Callback = DefaultCallback> = FreeArray<
+type Callback = (...args: unknown[]) => void
+export type CallbackDefinition = Callback
+type SignalConnectionReferences = FreeArray<
 	{
-		Callback: P;
-		Connection: Connection<P>;
+		Callback: Callback;
+		Connection: Connection;
 	}
 >
 
 // Classes
-class Connection<P extends Callback = DefaultCallback> {
+class Connection {
 	// Private Properties
-	private ConnectionReferences: SignalConnectionReferences<P>
+	private ConnectionReferences: SignalConnectionReferences
 	private Location: string
 	private Disconnected: boolean
 
 	// Constructor
-	constructor(connections: SignalConnectionReferences<P>, callback: P) {
+	constructor(connections: SignalConnectionReferences, callback: Callback) {
 		// Store our signal/callback
 		this.ConnectionReferences = connections
 
@@ -55,7 +55,7 @@ class Connection<P extends Callback = DefaultCallback> {
 	}
 }
 
-class Event<P extends Callback = DefaultCallback> {
+class Event<P extends Callback> {
 	// Private Properties
 	private Signal: Signal<P>
 
@@ -77,7 +77,7 @@ class Event<P extends Callback = DefaultCallback> {
 
 class Signal<P extends Callback = DefaultCallback> {
 	// Private Properties
-	private ConnectionReferences: SignalConnectionReferences<P>
+	private ConnectionReferences: SignalConnectionReferences
 	private DestroyedState: boolean
 
 	// Constructor
@@ -90,7 +90,7 @@ class Signal<P extends Callback = DefaultCallback> {
 	}
 
 	// Public Methods
-	public Connect(callback: P): Connection<P> {
+	public Connect(callback: P): Connection {
 		// Make sure we aren't destroyed
 		if (this.DestroyedState) {
 			throw('Cannot connect to a Destroyed Signal')
@@ -141,8 +141,7 @@ class Signal<P extends Callback = DefaultCallback> {
 
 // Exports
 export type {Event, Connection}
-// deno-lint-ignore no-explicit-any
-export const IsConnection = (value: any): value is Connection<any> => {
+export const IsConnection = (value: unknown): value is Connection => {
 	return (value instanceof Connection)
 }
 export {Signal}

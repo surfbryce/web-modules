@@ -1,6 +1,9 @@
 // Packages
 import { GetUniqueId } from './UniqueId.ts'
-import { type Event, type Connection, Signal, IsConnection } from './Signal.ts'
+import {
+	Signal, IsConnection,
+	type Event, type Connection, type CallbackDefinition
+} from './Signal.ts'
 import { type Scheduled, IsScheduled, Cancel } from './Scheduler.ts'
 
 // Local Types
@@ -17,8 +20,7 @@ type Item = (
 	| Scheduled
 	| MutationObserver | ResizeObserver
 	| Element
-	// deno-lint-ignore no-explicit-any
-	| Signal<any> | Connection<any>
+	| Signal<CallbackDefinition> | Connection
 	| Callback
 )
 export type GiveableItem = Item
