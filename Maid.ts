@@ -16,7 +16,7 @@ type Item = (
 	Giveable
 	| Scheduled
 	| MutationObserver | ResizeObserver
-	| HTMLElement
+	| Element
 	// deno-lint-ignore no-explicit-any
 	| Signal<any> | Connection<any>
 	| Callback
@@ -81,7 +81,7 @@ class Maid implements Giveable {
 			item.disconnect()
 		} else if (IsConnection(item)) {
 			item.Disconnect()
-		} else if(item instanceof HTMLElement) {
+		} else if(item instanceof Element) {
 			item.remove()
 		} else {
 			item()
