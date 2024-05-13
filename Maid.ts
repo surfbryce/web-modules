@@ -85,8 +85,10 @@ class Maid implements Giveable {
 			item.Disconnect()
 		} else if(item instanceof Element) {
 			item.remove()
-		} else {
+		} else if (typeof item === "function") {
 			item()
+		} else {
+			console.warn("UNSUPPORTED MAID ITEM", typeof item, item)
 		}
 	}
 
